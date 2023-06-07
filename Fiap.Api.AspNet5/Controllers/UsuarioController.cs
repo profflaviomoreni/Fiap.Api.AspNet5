@@ -1,5 +1,6 @@
 ﻿using Fiap.Api.AspNet5.Models;
 using Fiap.Api.AspNet5.Repository.Interface;
+using Fiap.Api.AspNet5.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fiap.Api.AspNet5.Controllers
@@ -19,7 +20,7 @@ namespace Fiap.Api.AspNet5.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public ActionResult<UsuarioModel> Login([FromBody] UsuarioModel usuarioModel)
+        public ActionResult<dynamic> Login([FromBody] UsuarioModel usuarioModel)
         {
             var usuario = usuarioRepository.FindByName(usuarioModel.NomeUsuario);
 
@@ -33,7 +34,17 @@ namespace Fiap.Api.AspNet5.Controllers
             } else
             {
                 usuario.Senha = "";
-                return Ok(usuario);
+                var token = AuthenticationService.GetToken(usuario);
+
+                var retorno = new
+                {
+                    token = token,
+                    usuario = usuario,
+                    teste = "valor"
+                };
+
+
+                return Ok(retorno);
             }
              
         }
