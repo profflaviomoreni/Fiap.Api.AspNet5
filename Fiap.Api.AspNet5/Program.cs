@@ -12,7 +12,8 @@ builder.Services.AddDbContext<DataContext>(
                 .EnableSensitiveDataLogging(true)
 );
 
-builder.Services.AddScoped<ICategoriaRepository,CategoriaRepository>();
+builder.Services.AddScoped<IUsuarioRepository,UsuarioRepository>();
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
 
 builder.Services.AddControllers();
