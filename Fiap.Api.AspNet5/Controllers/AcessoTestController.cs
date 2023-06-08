@@ -11,6 +11,7 @@ namespace Fiap.Api.AspNet5.Controllers
     {
         [HttpGet]
         [Route("Anonimo")]
+        [AllowAnonymous]
         public string Anonimo()
         {
             return "Anonimo";
@@ -25,6 +26,7 @@ namespace Fiap.Api.AspNet5.Controllers
 
         [HttpGet]
         [Route("Junior")]
+        [Authorize(Roles = "Senior, Pleno, Junior")]
         public string Junior()
         {
             return "Junior";
@@ -33,6 +35,7 @@ namespace Fiap.Api.AspNet5.Controllers
 
         [HttpGet]
         [Route("Pleno")]
+        [Authorize(Roles = "Senior, Pleno")]
         public string Pleno()
         {
             return "Pleno";
@@ -40,6 +43,7 @@ namespace Fiap.Api.AspNet5.Controllers
 
         [HttpGet]
         [Route("Senior")]
+        [Authorize(Roles = "Senior")]
         public string Senior()
         {
             return "Pleno";

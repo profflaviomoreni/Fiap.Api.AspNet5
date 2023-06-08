@@ -22,7 +22,7 @@ namespace Fiap.Api.AspNet5.Services
                     new Claim( ClaimTypes.Name, model.NomeUsuario ),
                     new Claim( ClaimTypes.Role, model.Regra)
                 }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddMinutes(1),
                 SigningCredentials = new SigningCredentials( 
                     new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature )
             };
