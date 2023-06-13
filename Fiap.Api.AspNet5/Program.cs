@@ -20,6 +20,15 @@ builder.Services.AddScoped<IUsuarioRepository,UsuarioRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
 #region autenticacao
+bool CustomLifetimeValidator(DateTime? notBefore, DateTime? expires, SecurityToken tokenToValidate, TokenValidationParameters @param)
+{
+    if (expires != null)
+    {
+        return expires > DateTime.UtcNow;
+    }
+    return false;
+}
+
 var key = Encoding.ASCII.GetBytes(Settings.Secret);
 
 builder.Services.AddAuthentication(x => {
@@ -35,7 +44,10 @@ builder.Services.AddAuthentication(x => {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
-            ValidateAudience = false
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            LifetimeValidator = CustomLifetimeValidator,
+            RequireExpirationTime = true,
         };
     } 
  );
@@ -57,6 +69,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
