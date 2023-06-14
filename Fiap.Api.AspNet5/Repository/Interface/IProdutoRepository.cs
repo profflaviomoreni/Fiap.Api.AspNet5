@@ -4,6 +4,9 @@ namespace Fiap.Api.AspNet5.Repository.Interface
 {
     public interface IProdutoRepository
     {
+
+        public int Count();
+        public IList<ProdutoModel> FindAll(int pagina, int tamanho);
         public IList<ProdutoModel> FindAll();
         public ProdutoModel FindById(int id);
         public int Insert(ProdutoModel produtoModel);

@@ -7,41 +7,44 @@ namespace Fiap.Api.AspNet5.Repository
 {
     public class ProdutoRepository : IProdutoRepository
     {
-        private readonly DataContext _context;
+        private readonly DataContext context;
 
-        public ProdutoRepository(DataContext context)
+        public ProdutoRepository(DataContext _context)
         {
-            _context = context;
+            context = _context;
         }
 
         public IList<ProdutoModel> FindAll()
         {
-            return _context.Produtos.Include(c => c.Categoria)
+            return context.Produtos.Include(c => c.Categoria)
                                     .Include(m => m.Marca)
                                     .AsNoTracking()
                                     .ToList();
         }
 
+
+
         public ProdutoModel FindById(int id)
         {
-            return _context.Produtos.Include(c => c.Categoria)
-                                    .Include(m => m.Marca)
-                                    .FirstOrDefault(x => x.ProdutoId == id);
+            return context.Produtos
+                        .Include(c => c.Categoria)
+                        .Include(m => m.Marca)
+                            .FirstOrDefault(x => x.ProdutoId == id);
 
 
         }
 
         public int Insert(ProdutoModel produtoModel)
         {
-            _context.Produtos.Add(produtoModel);
-            _context.SaveChanges();
+            context.Produtos.Add(produtoModel);
+            context.SaveChanges();
             return produtoModel.ProdutoId;
         }
 
         public void Update(ProdutoModel produtoModel)
         {
-            _context.Produtos.Update(produtoModel);
-            _context.SaveChanges();
+            context.Produtos.Update(produtoModel);
+            context.SaveChanges();
         }
 
         public void Delete(int id)
@@ -51,8 +54,21 @@ namespace Fiap.Api.AspNet5.Repository
                 ProdutoId = id
             };
 
-            _context.Produtos.Remove(produto);
-            _context.SaveChanges();
+            context.Produtos.Remove(produto);
+            context.SaveChanges();
+        }
+
+        public int Count()
+        {
+            return context.Produtos.Count();
+        }
+
+        public IList<ProdutoModel> FindAll(int pagina, int tamanho)
+        {
+            var lista = context.Produtos
+                            .Skip(tamanho * pagina)
+                            .Take(tamanho).ToList();
+            return lista;
         }
     }
 }
